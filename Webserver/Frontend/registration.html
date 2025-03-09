@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <script>
+        function sendRequest(type) {
+            var username = document.getElementById("register_username").value;
+            var password = document.getElementById("register_password").value;
+            var endpoint = "rabbitMQClient.php"; // Adjust to your registration handler
+
+            var request = new XMLHttpRequest();
+            request.open("POST", endpoint, true);
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            request.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById(type + "_response").innerHTML = this.responseText;
+                }
+            };
+
+            request.send("username=" + username + "&password=" + password);
+        }
+    </script>
+</head>
+<body>
+    <h2>Registration</h2>
+    <form onsubmit="event.preventDefault(); sendRequest('register');">
+        <label for="register_username">Username:</label>
+        <input type="text" id="register_username" required><br><br>
+
+        <label for="register_password">Password:</label>
+        <input type="password" id="register_password" required><br><br>
+
+        <button type="submit">Register</button>
+    </form>
+    <div id="register_response"></div>
+</body>
+</html>
