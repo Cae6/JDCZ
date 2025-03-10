@@ -1,4 +1,4 @@
-#!/usr/bin/php 
+#!/usr/share/php 
 
 <?php
 require_once('path.inc');
@@ -8,7 +8,7 @@ require_once('rabbitMQLib.inc');
 // Database connection function
 function connectToDatabase() {
     // Set your DB credentials here
-    $mydb = new mysqli('127.0.0.1', 'root', '12345', 'testdb');
+    $mydb = new mysqli('10.144.59.102', 'zb123', 'password', 'beginDB');
     
     // Check connection
     if ($mydb->connect_error) {
@@ -47,7 +47,7 @@ function doLogin($username, $password) {
     // Check if password matches
     if ($password === $dbPassword) {
         // Generate a session token
-        $token = bin2hex(random_bytes(16));
+        $token = bin2hex(random_bytes(32));
         
         // Update the database with the session token
         $stmt = $conn->prepare("UPDATE users SET token = ? WHERE username = ?");
@@ -128,8 +128,13 @@ function initiateSession($username) {
     // Connect to the database
     $conn = connectToDatabase();
 
+<<<<<<< HEAD
     // Generate a secure session ID
     $sessionID = bin2hex(random_bytes(32));  //32 bytes
+=======
+    // Generate a secure session ID 
+    $sessionID = bin2hex(random_bytes(32)); //32 bytes
+>>>>>>> refs/remotes/origin/main
 
     // Get the current time 
     $sessionTime = time();
