@@ -1,5 +1,5 @@
 <?php
-require_once("db_connection.php");
+require_once('db_connection.php');
 require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');  // Include your database connection function
