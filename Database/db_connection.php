@@ -1,5 +1,3 @@
-#!/usr/bin/php
-
 <?php
 require_once('path.inc');
 require_once('get_host_info.inc');
@@ -16,17 +14,6 @@ function connectToDatabase() {
         exit(0);
     }
     return $mydb;
-}
-
-
-
-
-$query = "SELECT * FROM users;";
-$response = $mydb->query($query);
-if ($mydb->error != 0) {
-    echo "Failed to execute query: " . PHP_EOL;
-    echo __FILE__ . ':' . __LINE__ . ": error: " . $mydb->error . PHP_EOL;
-    exit(0);
 }
 
 // Login function
