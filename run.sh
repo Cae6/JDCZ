@@ -3,10 +3,10 @@
 echo "Setting up the project environment..."
 
 # Copy Apache configuration files
-sudo cp -f misc/001-sample.com /etc/apache2/sites-available/
+sudo cp -f 001-sample.conf /etc/apache2/sites-available/
 
 # Enable the site
-sudo a2ensite 001-sample.com
+sudo a2ensite 001-sample.conf
 
 # Restart Apache
 echo "Restarting Apache server..."

@@ -10,7 +10,7 @@ function requestProcessor($request)
 
     echo "request recieved".PHP_EOL;
     var_dump($request);
-    
+
     // Ensure request contains 'type'
     if (!isset($request['type'])) {
         return ["error" => "Unsupported message type"];
@@ -59,4 +59,6 @@ function requestProcessor($request)
     }
 }
 
+$server = new rabbitMQServer("testRabbitMQ.ini", "server");
+$server->process_requests('requestProcessor');
 ?>

@@ -5,7 +5,7 @@
 // Database connection function
 function connectToDatabase() {
     // Set your DB credentials here
-    $mydb = new mysqli('127.0.0.1', 'root', '12345', 'testdb');
+    $mydb = new mysqli('10.144.59.102', 'zb123', 'password', 'beginDB');
     
     // Check connection
     if ($mydb->connect_errno) {
@@ -44,7 +44,7 @@ function doLogin($username, $password) {
     // Check if password matches
     if ($password === $dbPassword) {
         // Generate a session token
-        $token = bin2hex(random_bytes(16));
+        $token = bin2hex(random_bytes(32));
         
         // Update the database with the session token
         $stmt = $conn->prepare("UPDATE users SET token = ? WHERE username = ?");
@@ -126,7 +126,7 @@ function initiateSession($username) {
     $conn = connectToDatabase();
 
     // Generate a secure session ID 
-    $sessionID = bin2hex(random_bytes(32));  32 bytes 
+    $sessionID = bin2hex(random_bytes(32)); //32 bytes
 
     // Get the current time 
     $sessionTime = time();
