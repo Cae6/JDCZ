@@ -1,6 +1,9 @@
 #!/usr/share/php 
 
 <?php
+require_once('path.inc');
+require_once('get_host_info.inc');
+require_once('rabbitMQLib.inc');  
 
 // Database connection function
 function connectToDatabase() {
@@ -8,21 +11,19 @@ function connectToDatabase() {
     $mydb = new mysqli('10.144.59.102', 'zb123', 'password', 'beginDB');
     
     // Check connection
-    if ($mydb->connect_errno) {
+    if ($mydb->connect_error) {
         echo "Failed to connect to the database: " . $mydb->connect_error . PHP_EOL;
         exit(0);
     }
     return $mydb;
 }
 
-// Sample query to test database connection
-$mydb = connectToDatabase();
-echo "Successfully connected to the database" . PHP_EOL;
 
-// Query to select all students
-$query = "SELECT * FROM students;";
+
+
+$query = "SELECT * FROM users;";
 $response = $mydb->query($query);
-if ($mydb->errno != 0) {
+if ($mydb->error != 0) {
     echo "Failed to execute query: " . PHP_EOL;
     echo __FILE__ . ':' . __LINE__ . ": error: " . $mydb->error . PHP_EOL;
     exit(0);
