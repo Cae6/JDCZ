@@ -1,9 +1,9 @@
-#!/usr/share/php 
+#!/usr/bin/php
 
 <?php
 require_once('path.inc');
 require_once('get_host_info.inc');
-require_once('rabbitMQLib.inc');  
+require_once('rabbitMQLib.inc');
 
 // Database connection function
 function connectToDatabase() {
@@ -126,8 +126,13 @@ function initiateSession($username) {
     // Connect to the database
     $conn = connectToDatabase();
 
+<<<<<<< HEAD
+    // Generate a secure session ID
+    $sessionID = bin2hex(random_bytes(32));  //32 bytes
+=======
     // Generate a secure session ID 
     $sessionID = bin2hex(random_bytes(32)); //32 bytes
+>>>>>>> refs/remotes/origin/main
 
     // Get the current time 
     $sessionTime = time();
