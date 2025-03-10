@@ -126,13 +126,11 @@ function initiateSession($username) {
     // Connect to the database
     $conn = connectToDatabase();
 
-<<<<<<< HEAD
     // Generate a secure session ID
     $sessionID = bin2hex(random_bytes(32));  //32 bytes
-=======
+
     // Generate a secure session ID 
     $sessionID = bin2hex(random_bytes(32)); //32 bytes
->>>>>>> refs/remotes/origin/main
 
     // Get the current time 
     $sessionTime = time();
