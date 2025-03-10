@@ -1,4 +1,4 @@
-#!/usr/share/php 
+#!/usr/share/php
 
 <?php
 require_once('path.inc');
