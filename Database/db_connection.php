@@ -1,6 +1,9 @@
 #!/usr/bin/php 
 
 <?php
+require_once('path.inc');
+require_once('get_host_info.inc');
+require_once('rabbitMQLib.inc');
 
 // Database connection function
 function connectToDatabase() {
@@ -8,7 +11,7 @@ function connectToDatabase() {
     $mydb = new mysqli('127.0.0.1', 'root', '12345', 'testdb');
     
     // Check connection
-    if ($mydb->connect_errno) {
+    if ($mydb->connect_error) {
         echo "Failed to connect to the database: " . $mydb->connect_error . PHP_EOL;
         exit(0);
     }
@@ -125,8 +128,8 @@ function initiateSession($username) {
     // Connect to the database
     $conn = connectToDatabase();
 
-    // Generate a secure session ID 
-    $sessionID = bin2hex(random_bytes(32));  32 bytes 
+    // Generate a secure session ID
+    $sessionID = bin2hex(random_bytes(32));  //32 bytes
 
     // Get the current time 
     $sessionTime = time();
