@@ -23,23 +23,22 @@ function requestProcessor($request)
                 return ["error" => "Missing username or password"];
             }
 
-            // Call doLogin and get the response
+           
             $response = doLogin($request['username'], $request['password']);
             
             // Check if login was successful
             if ($response["success"] === true) {
-                // Create session after successful login
+                
                 $sessionDB = createSession($response["user"]["id"]);
                 
                 // Add session data to response
                 $response["session"] = $sessionDB;
                 
-                // Call sessionExpire to clean up expired sessions
                 sessionExpire();
             } else {
                 return $response;  
             }
-            return $response;  // Return successful login with session
+            return $response; 
 
         case "register":
             if (!isset($request['username']) || !isset($request['password']) || !isset($request['firstName']) || !isset($request['lastName'])) {

@@ -1,4 +1,4 @@
-#!/usr/bin/php 
+#!/usr/share/php 
 
 <?php
 
