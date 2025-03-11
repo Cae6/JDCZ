@@ -28,10 +28,6 @@ if [ -d "Backend" ]; then
     sudo cp -r Backend /var/www/sample/
 fi
 
-# Start RabbitMQ server process
-echo "Starting RabbitMQ server..."
-cd ../Database
-php db_processor.php &
 
 # Open the website in the default browser
 echo "Opening homepage..."
