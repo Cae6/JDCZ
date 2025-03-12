@@ -18,6 +18,11 @@
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById(type + "_response").innerHTML = this.responseText;
                 }
+
+                 if (response.redirect_url) {
+                    window.location.href = response.redirect_url;
+            }
+                
             };
 
             request.send("username=" + username + "&password=" + password);
