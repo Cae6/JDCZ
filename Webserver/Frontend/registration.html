@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,9 +8,9 @@
         function sendRequest(type) {
             var username = document.getElementById("register_username").value;
             var password = document.getElementById("register_password").value;    
-            var username = document.getElementById("register_firstname").value;
-            var password = document.getElementById("register_lastname").value;
-            var endpoint = "rabbitMQClient.php"; // Adjust to your registration handler
+            var firstname = document.getElementById("firstname").value;
+            var lastname = document.getElementById("lastname").value;
+            var endpoint = "rabbitMQClient.php";
 
             var request = new XMLHttpRequest();
             request.open("POST", endpoint, true);
@@ -20,11 +20,9 @@
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById(type + "_response").innerHTML = this.responseText;
                 }
-
-             
-                
             };
 
+        
             request.send("username=" + username + "&password=" + password + "&firstname=" + firstname + "&lastname=" + lastname);
         }
     </script>
@@ -38,7 +36,7 @@
         <label for="register_password">Password:</label>
         <input type="password" id="register_password" required><br><br>
 
-         <label for="firstname">First Name:</label>
+        <label for="firstname">First Name:</label>
         <input type="text" id="firstname" required><br><br>
 
         <label for="lastname">Last Name:</label>
