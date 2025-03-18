@@ -22,15 +22,15 @@ function doLogin($username, $password) {
     $conn = connectToDatabase();
     
     // Prepare and execute the query to fetch password from the database
-    $stmt = $conn->prepare("SELECT password FROM users WHERE username = ?");
+    $stmt = $conn->prepare("SELECT id, password FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
-    $stmt->bind_result($dbPassword);
+    $stmt->bind_result($userId, $dbPassword);
     $stmt->fetch();
     $stmt->close();
     
     // Check if password matches
-    if ($password === $dbPassword) {
+    if ($userId && $password === $dbPassword) {
         // Generate a session token
         $token = bin2hex(random_bytes(32));
         
@@ -41,7 +41,7 @@ function doLogin($username, $password) {
         $stmt->close();
         
         // Return success
-        return ["success" => true, "message" => "Login successful", "token" => $token];
+        return ["success" => true, "message" => "Login successful", "token" => $token, "user_id => $userId];
     } else {
         return ["success" => false, "message" => "Invalid credentials"];
     }
@@ -70,7 +70,7 @@ function doAuthenticate($sessionID) {
     $conn = connectToDatabase();
 
     // Get session details from the database
-    $stmt = $conn->prepare("SELECT session_id, session_time FROM sessions WHERE session_id = ?");
+    $stmt = $conn->prepare("SELECT session_id, session_time FROM session WHERE session_id = ?");
     $stmt->bind_param("s", $sessionID);
     $stmt->execute();
     $stmt->bind_result($dbSessionID, $sessionTime);
@@ -101,7 +101,7 @@ function deleteSession($sessionID) {
     $conn = connectToDatabase();
 
     // Delete session from the database
-    $stmt = $conn->prepare("DELETE FROM sessions WHERE session_id = ?");
+    $stmt = $conn->prepare("DELETE FROM session WHERE session_id = ?");
     $stmt->bind_param("s", $sessionID);
     $stmt->execute();
     $stmt->close();
@@ -113,18 +113,12 @@ function initiateSession($username) {
     // Connect to the database
     $conn = connectToDatabase();
 
-    // Generate a secure session ID
-    $sessionID = bin2hex(random_bytes(32));  //32 bytes
-
-    // Generate a secure session ID 
-    $sessionID = bin2hex(random_bytes(32)); //32 bytes
-
     // Get the current time 
     $sessionTime = time();
 
     // Insert session into the database
-    $stmt = $conn->prepare("INSERT INTO sessions (session_id, username, session_time) VALUES (?, ?, ?)");
-    $stmt->bind_param("ssi", $sessionID, $username, $sessionTime);
+    $stmt = $conn->prepare("INSERT INTO session (session_id, username, session_time) VALUES (?, ?, ?)");
+    $stmt->bind_param("ssi", $token, $username, $sessionTime);
     
     // Execute the query and check if successful
     if ($stmt->execute()) {
