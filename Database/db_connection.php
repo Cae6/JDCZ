@@ -54,7 +54,7 @@ function doRegister($username, $password, $firstName, $lastName) {
     
     // Prepare and insert user into the database
     $stmt = $conn->prepare("INSERT INTO users (username, password, firstName, lastName) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $username, $hashedPassword, $firstName, $lastName);
+    $stmt->bind_param("ssss", $username, $password, $firstName, $lastName);
     
     if ($stmt->execute()) {
         $stmt->close();
