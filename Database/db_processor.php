@@ -29,10 +29,10 @@ function requestProcessor($request)
             // Check if login was successful
             if ($response["success"] === true) {
                 
-                $sessionDB = createSession($response["user"]["id"]);
+                $session = initiateSession($response["user_id"]);
                 
                 // Add session data to response
-                $response["session"] = $sessionDB;
+                $response["session"] = $session;
                 
                 sessionExpire();
             } else {
