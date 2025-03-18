@@ -18,13 +18,15 @@
 
             request.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById(type + "_response").innerHTML = this.responseText;
+                    // Parse the JSON response from the backend
+                    var response = JSON.parse(this.responseText); // Assuming PHP sends JSON
+                    // Display the message returned from PHP
+                    document.getElementById(type + "_response").innerHTML = response.message;
                 }
             };
-
-        
+            // Send form data as a URL-encoded string
             request.send("username=" + username + "&password=" + password + "&firstname=" + firstname + "&lastname=" + lastname);
-        }
+}
     </script>
 </head>
 <body>
