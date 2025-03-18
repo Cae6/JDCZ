@@ -109,7 +109,7 @@ function deleteSession($sessionID) {
 }
 
 
-function initiateSession($username) {
+function initiateSession($userId) {
     // Connect to the database
     $conn = connectToDatabase();
 
