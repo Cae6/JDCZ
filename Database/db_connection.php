@@ -41,7 +41,7 @@ function doLogin($username, $password) {
         $stmt->close();
         
         // Return success
-        return ["success" => true, "message" => "Login successful", "token" => $token, "user_id => $userId];
+        return ["success" => true, "message" => "Login successful", "token" => $token, "user_id" => $userId];
     } else {
         return ["success" => false, "message" => "Invalid credentials"];
     }
