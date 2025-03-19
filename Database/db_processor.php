@@ -2,7 +2,7 @@
 require_once('db_connection.php');
 require_once('path.inc');
 require_once('get_host_info.inc');
-require_once('rabbitMQLib.inc');  // Include your database connection function
+require_once('rabbitMQLib.inc');  
 
 
 function requestProcessor($request)
@@ -17,19 +17,22 @@ function requestProcessor($request)
     }
 
     switch ($request['type']) {
+        case "register":
+            if (!isset($request['username']) || !isset($request['password']) || !isset($request['firstName']) || !isset($request['lastName'])) {
+                return ["error" => "Missing required fields"];
+            }
+            return doRegister($request['username'], $request['password'], $request['firstName'], $request['lastName']);
         case "login":
             // Ensure 'username' and 'password'
             if (!isset($request['username']) || !isset($request['password'])) {
                 return ["error" => "Missing username or password"];
             }
-
-           
             $response = doLogin($request['username'], $request['password']);
             
             // Check if login was successful
             if ($response["success"] === true) {
                 
-                $session = initiateSession($response["user_id"]);
+                $session = initiateSession($response['user']['id']);
                 
                 // Add session data to response
                 $response["session"] = $session;
@@ -39,13 +42,6 @@ function requestProcessor($request)
                 return $response;  
             }
             return $response; 
-
-        case "register":
-            if (!isset($request['username']) || !isset($request['password']) || !isset($request['firstName']) || !isset($request['lastName'])) {
-                return ["error" => "Missing required fields"];
-            }
-            return doRegister($request['username'], $request['password'], $request['firstName'], $request['lastName']);
-
         case "authenticate":
             // Ensure 'session_id'
             if (!isset($request['session_id'])) {
