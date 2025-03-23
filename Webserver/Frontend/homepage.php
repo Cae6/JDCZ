@@ -1,29 +1,28 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+<?php
+
+if (!isset($_COOKIE['session_id'])) {
+    header("Location: login.html");
+    exit();
 }
 
-.container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 80%;
-    max-width: 400px;
+$authResponse = doAuthenticate($_COOKIE['session_id']);
+if (!$authResponse['success']) {
+    header("Location: login.html");
+    exit();
 }
-
-h1 {
-    color: #333;
-}
-
-p {
-    color: #666;
-    font-size: 16px;
-}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="homepage.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
+        <p>You have successfully logged in.</p>
+    </div>
+</body>
+</html>
