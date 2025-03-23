@@ -9,8 +9,8 @@
         function sendRequest(type) {
             var username = document.getElementById("register_username").value;
             var password = document.getElementById("register_password").value;    
-            var firstname = document.getElementById("firstname").value;
-            var lastname = document.getElementById("lastname").value;
+            var firstName = document.getElementById("firstName").value;
+            var lastName = document.getElementById("lastName").value;
             var endpoint = "rabbitMQClient.php";
 
             var request = new XMLHttpRequest();
@@ -23,10 +23,14 @@
                     var response = JSON.parse(this.responseText); // Assuming PHP sends JSON
                     // Display the message returned from PHP
                     document.getElementById(type + "_response").innerHTML = response.message;
+
+                    if (response.success) {
+                    window.location.href = "login.html"; 
+                }
                 }
             };
-            // Send form data as a URL-encoded string
-            request.send("username=" + username + "&password=" + password + "&firstname=" + firstname + "&lastname=" + lastname);
+            // Send form data as a string
+            request.send("action=" + type + "&username=" + username + "&password=" + password + "&firstName=" + firstName + "&lastName=" + lastName);
         }
     </script>
 </head>
@@ -39,14 +43,15 @@
         <label for="register_password">Password:</label>
         <input type="password" id="register_password" required><br><br>
 
-        <label for="firstname">First Name:</label>
-        <input type="text" id="firstname" required><br><br>
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" required><br><br>
 
-        <label for="lastname">Last Name:</label>
-        <input type="text" id="lastname" required><br><br>
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" required><br><br>
 
         <button type="submit">Register</button>
     </form>
     <div id="register_response"></div>
 </body>
 </html>
+
