@@ -33,15 +33,26 @@ function doLogin($username, $password) {
     if ($userId && $password === $dbPassword) {
         // Generate a session token
         $token = bin2hex(random_bytes(32));
+        $sessionTime = time();
         
         // Update the database with the session token
-        $stmt = $conn->prepare("UPDATE users SET token = ? WHERE username = ?");
-        $stmt->bind_param("ss", $token, $username);
+        $stmt = $conn->prepare("UPDATE users SET token = ? WHERE id = ?");
+        $stmt->bind_param("si", $token, $userId);
         $stmt->execute();
         $stmt->close();
+
+        $stmt = $conn->prepare("INSERT INTO session (session_id, user_id, session_time) VALUES (?, ?, ?)");
+        $stmt->bind_param("sii", $token, $userId, $sessionTime);
+        if (!$stmt->execute()) {
+            $stmt->close();
+            $conn->close();
+            return ["success" => false, "message" => "Failed to create session"];
+        }
+        $stmt->close();
+        $conn->close();
         
         // Return success
-        return ["success" => true, "message" => "Login successful", "token" => $token, "user_id" => $userId];
+        return ["success" => true, "message" => "Login successful", "session_id" => $token, "user_id" => $userId];
     } else {
         return ["success" => false, "message" => "Invalid credentials"];
     }
@@ -87,7 +98,7 @@ function doAuthenticate($sessionID) {
     $sessionLifetime = 300;
 
     if (($currentTime - $sessionTime) > $sessionLifetime) {
-        // Session expired, remove it
+        // Session expired
         deleteSession($sessionID);
         return ["success" => false, "message" => "Session expired"];
     }
@@ -109,28 +120,6 @@ function deleteSession($sessionID) {
 }
 
 
-function initiateSession($userId) {
-    // Connect to the database
-    $conn = connectToDatabase();
-
-    // Get the current time 
-    $sessionTime = time();
-
-    // Insert session into the database
-    $stmt = $conn->prepare("INSERT INTO session (session_id, username, session_time) VALUES (?, ?, ?)");
-    $stmt->bind_param("ssi", $token, $username, $sessionTime);
-    
-    // Execute the query and check if successful
-    if ($stmt->execute()) {
-        $stmt->close();
-        $conn->close();
-        return ["success" => true, "session_id" => $sessionID];  // Return the session ID
-    } else {
-        $stmt->close();
-        $conn->close();
-        return ["success" => false, "message" => "Failed to create session"];
-    }
-}
 
 function sessionExpire() {
    
@@ -142,8 +131,8 @@ function sessionExpire() {
     // current time
     $currentTime = time();
 
-    // Delete sessions that have expired (session_time + sessionLifetime < currentTime)
-    $stmt = $conn->prepare("DELETE FROM sessions WHERE (session_time + ?) < ?");
+    // (session_time + sessionLifetime < currentTime)
+    $stmt = $conn->prepare("DELETE FROM session WHERE (session_time + ?) < ?");
     $stmt->bind_param("ii", $sessionLifetime, $currentTime);
     
     //check if sessions were removed
@@ -159,3 +148,4 @@ function sessionExpire() {
 }
 
 ?>
+
