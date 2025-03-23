@@ -6,7 +6,7 @@ require_once('rabbitMQLib.inc');
 
 function connectToDatabase() {
     // 
-    $mydb = new mysqli('10.144.59.102', 'zb123', 'password', 'begindb');
+    $mydb = new mysqli('127.0.0.1', 'zb123', 'password', 'begindb');
     
     // Check connection
     if ($mydb->connect_error) {
