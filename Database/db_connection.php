@@ -3,9 +3,9 @@ require_once('path.inc');
 require_once('get_host_info.inc');
 require_once('rabbitMQLib.inc');
 
-// Database connection function
+
 function connectToDatabase() {
-    // Set your DB credentials here
+    // 
     $mydb = new mysqli('10.144.59.102', 'zb123', 'password', 'begindb');
     
     // Check connection
@@ -21,7 +21,7 @@ function doLogin($username, $password) {
     // Connect to the database
     $conn = connectToDatabase();
     
-    // Prepare and execute the query to fetch password from the database
+    
     $stmt = $conn->prepare("SELECT id, password FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
@@ -29,13 +29,13 @@ function doLogin($username, $password) {
     $stmt->fetch();
     $stmt->close();
     
-    // Check if password matches
+   
     if ($userId && $password === $dbPassword) {
-        // Generate a session token
+        // a session token
         $token = bin2hex(random_bytes(32));
         $sessionTime = time();
         
-        // Update the database with the session token
+      
         $stmt = $conn->prepare("UPDATE users SET token = ? WHERE id = ?");
         $stmt->bind_param("si", $token, $userId);
         $stmt->execute();
@@ -60,10 +60,10 @@ function doLogin($username, $password) {
 
 // Register function
 function doRegister($username, $password, $firstName, $lastName) {
-    // Connect to the database
+    
     $conn = connectToDatabase();
     
-    // Prepare and insert user into the database
+    
     $stmt = $conn->prepare("INSERT INTO users (username, password, firstName, lastName) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("ssss", $username, $password, $firstName, $lastName);
     
@@ -93,17 +93,17 @@ function doAuthenticate($sessionID) {
         return ["success" => false, "message" => "Invalid session"];
     }
 
-    // Check if session has expired (e.g., 5 minutes expiration time)
+    // Check if session has expired 
     $currentTime = time();
     $sessionLifetime = 300;
 
     if (($currentTime - $sessionTime) > $sessionLifetime) {
-        // Session expired
+  
         deleteSession($sessionID);
         return ["success" => false, "message" => "Session expired"];
     }
 
-    // Session is valid
+    
     return ["success" => true, "message" => "Session is valid"];
 }
 
@@ -125,17 +125,17 @@ function sessionExpire() {
    
     $conn = connectToDatabase();
 
-    //  session lifetime 
+   
     $sessionLifetime = 300;
 
-    // current time
+   
     $currentTime = time();
 
     // (session_time + sessionLifetime < currentTime)
     $stmt = $conn->prepare("DELETE FROM session WHERE (session_time + ?) < ?");
     $stmt->bind_param("ii", $sessionLifetime, $currentTime);
     
-    //check if sessions were removed
+   
     if ($stmt->execute()) {
         $stmt->close();
         $conn->close();
@@ -148,4 +148,3 @@ function sessionExpire() {
 }
 
 ?>
-
